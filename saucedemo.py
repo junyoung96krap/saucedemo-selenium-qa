@@ -115,6 +115,40 @@ try:
         result_fail_list.append(tc_progress)
         fail_reason_list.append(f'{tc_progress} : {fail_reason}')
 
+    # TC_005 :: 낮은 가격부터 정렬되었는가??
+    try:
+        tc_progress = 'TC_005'
+
+        driver.find_element(By.CLASS_NAME, 'product_sort_container').click()
+        driver.find_element(By.CSS_SELECTOR, '#header_container > div.header_secondary_container > div > span > select > option:nth-child(3)').click()
+
+        prices = driver.find_elements(By.CLASS_NAME, 'inventory_item_price')
+        price_list = []
+
+        for price in prices:
+            price_text = price.text
+            price_text = price_text.replace('$', '')
+            price_number = float(price_text)
+
+            price_list.append(price_number)
+
+        sorted_price_list = sorted(price_list)
+
+        assert price_list == sorted_price_list
+
+        result_pass_list.append(tc_progress)
+        print(f'상품 정렬 성공, PASS')
+        print(price_list)
+
+    except Exception as e:
+        fail_reason = '상품 정렬 실패'
+        print(f'{fail_reason}, FAIL')
+        result_fail_list.append(tc_progress)
+        fail_reason_list.append(f'{tc_progress} : {fail_reason}')
+
+
+
+    # 웹 페이지 결과 확인을 위한 time.sleep(10)
     time.sleep(10)
     
 except Exception as e:
