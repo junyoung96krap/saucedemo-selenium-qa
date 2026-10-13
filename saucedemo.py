@@ -147,6 +147,63 @@ try:
         fail_reason_list.append(f'{tc_progress} : {fail_reason}')
 
 
+    # TC_006	상품 가격 높은순 정렬
+    try:
+        tc_progress = 'TC_006'
+
+        driver.find_element(By.CLASS_NAME, 'product_sort_container').click()
+        driver.find_element(By.CSS_SELECTOR, '#header_container > div.header_secondary_container > div > span > select > option:nth-child(4)').click()
+
+        prices = driver.find_elements(By.CLASS_NAME, 'inventory_item_price')
+        price_list = []
+
+        for price in prices:
+            price_text = price.text
+            price_text = price.text.replace('$', '')
+            price_number = float(price_text)
+
+            price_list.append(price_number)
+
+        sorted_price_list = sorted(price_list, reverse=True)
+
+        assert price_list == sorted_price_list
+
+        result_pass_list.append(tc_progress)
+        print(f'상품 정렬 성공, PASS')
+        print(price_list)
+
+    except Exception as e:
+        fail_reason = '상품 정렬 실패'
+        print(f'{fail_reason}, FAIL')
+        result_fail_list.append(tc_progress)
+        fail_reason_list.append(f'{tc_progress} : {fail_reason}')
+        print(price_list)
+        
+	
+    # TC_007	상품 상세 페이지 이동
+    try:
+        tc_progress = 'TC_007'
+
+        driver.find_element(By.CLASS_NAME, 'inventory_item_name').click()
+        driver.implicitly_wait(10)
+
+        if driver.find_element(By.ID, 'back-to-products').is_displayed():
+            print(f'상품 상세 페이지 이동 성공, PASS')
+            result_pass_list.append(tc_progress)
+        else:
+            fail_reason = '상품 상세 페이지 이동 실패'
+            print(f'{fail_reason}, FAIL')
+            result_fail_list.append(tc_progress)
+            fail_reason_list.append(f'{tc_progress} : {fail_reason}')
+    except Exception as e:
+        fail_reason = '상품 상세 페이지 이동 중 오류'
+        print(f'{fail_reason}, FAIL')
+        result_fail_list.append(tc_progress)
+        fail_reason_list.append(f'{tc_progress} : {fail_reason}')
+
+# TC_008	상품 장바구니 추가	버튼 클릭 + 장바구니 수량 검증
+# TC_009	장바구니 상품 삭제	삭제 + 장바구니 상태 검증
+
 
     # 웹 페이지 결과 확인을 위한 time.sleep(10)
     time.sleep(10)
