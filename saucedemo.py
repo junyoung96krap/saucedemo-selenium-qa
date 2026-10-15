@@ -179,7 +179,6 @@ try:
         fail_reason_list.append(f'{tc_progress} : {fail_reason}')
         print(price_list)
         
-	
     # TC_007	상품 상세 페이지 이동
     try:
         tc_progress = 'TC_007'
@@ -201,9 +200,45 @@ try:
         result_fail_list.append(tc_progress)
         fail_reason_list.append(f'{tc_progress} : {fail_reason}')
 
-# TC_008	상품 장바구니 추가	버튼 클릭 + 장바구니 수량 검증
-# TC_009	장바구니 상품 삭제	삭제 + 장바구니 상태 검증
+# TC_008	상품 장바구니 추가	버튼 클릭 + 장바구니 수량 검증 
+    try:
+        tc_progress = 'TC_008'
 
+        driver.find_element(By.CLASS_NAME, 'btn_inventory').click()
+        
+        cart_cnt = driver.find_element(By.CLASS_NAME, 'shopping_cart_badge').text
+
+        assert cart_cnt == '1'
+
+        print(f'장바구니 추가 완료, PASS')
+        print(f'장바구니 텍스트 : {cart_cnt}')
+        result_pass_list.append(tc_progress)
+
+    except Exception as e :
+        fail_reason = '장바구니 추가 중 오류 발생'
+        print(f'{fail_reason}, FAIL')
+        result_fail_list.append(tc_progress)
+        fail_reason_list.append(f'{tc_progress} : {fail_reason}')
+
+# TC_009	장바구니 상품 삭제	삭제 + 장바구니 상태 검증
+    try:
+        tc_progress = 'TC_009'
+
+        driver.find_element(By.CLASS_NAME, 'shopping_cart_link').click()
+        driver.find_element(By.CLASS_NAME, 'cart_button').click()
+
+        cart_cnt = driver.find_elements(By.CLASS_NAME, 'inventory_item_name')
+
+        assert len(cart_cnt) == 0
+
+        print(f'장바구니 삭제 완료, PASS')
+        print(f'장바구니 텍스트 : {cart_cnt}')
+        result_pass_list.append(tc_progress)
+    except Exception as e :
+        fail_reason = '장바구니 삭제 실패'
+        print(f'{fail_reason}, FAIL')
+        result_fail_list.append(tc_progress)
+        fail_reason_list.append(f'{tc_progress} : {fail_reason}')
 
     # 웹 페이지 결과 확인을 위한 time.sleep(10)
     time.sleep(10)
